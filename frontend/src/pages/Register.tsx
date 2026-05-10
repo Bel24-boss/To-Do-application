@@ -45,17 +45,28 @@ export default function Register() {
 
   return (
     <AuthShell
-      eyebrow="Create Account"
-      title="Build a calmer, sharper way to manage work."
-      subtitle="Register once, store credentials securely, and unlock a protected workspace built for disciplined execution."
+      eyebrow="Launch Access"
+      title="Open a new route into your task universe."
+      subtitle="Create your operator account, secure your credentials, and unlock a luxury orbital workspace."
     >
       <div className="auth-content">
-        <div>
-          <p className="section-label">Get started</p>
+        <div className="auth-header-block">
+          <p className="section-label">Initiate launch</p>
           <h2>Create your account</h2>
           <p className="section-copy">
-            Your credentials are hashed securely and your session token unlocks protected routes.
+            Your credentials are sealed securely and your session token powers protected navigation.
           </p>
+        </div>
+
+        <div className="auth-support-grid">
+          <article className="auth-support-card">
+            <strong>Secure credential storage</strong>
+            <p>Your password is hashed before it ever reaches the dashboard flow.</p>
+          </article>
+          <article className="auth-support-card">
+            <strong>Fast guided onboarding</strong>
+            <p>Register once, then move straight into the login path with no confusion.</p>
+          </article>
         </div>
 
         {error ? <Notice tone="error">{error}</Notice> : null}
@@ -115,7 +126,7 @@ export default function Register() {
           </label>
 
           <button className="button button-primary" disabled={loading} type="submit">
-            {loading ? <Spinner label="Creating account" /> : <span>Register securely</span>}
+            {loading ? <Spinner label="Preparing launch" /> : <span>Activate account</span>}
             {!loading ? <ArrowRight size={18} /> : null}
           </button>
         </form>
@@ -123,6 +134,8 @@ export default function Register() {
         <p className="auth-switch">
           Already registered? <Link to="/login">Sign in</Link>
         </p>
+
+        <p className="auth-footnote">The visuals evolve, while the competency-task behavior stays intact.</p>
       </div>
     </AuthShell>
   );

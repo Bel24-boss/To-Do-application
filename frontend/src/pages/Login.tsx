@@ -42,17 +42,28 @@ export default function Login() {
 
   return (
     <AuthShell
-      eyebrow="Secure Sign In"
-      title="Your planning system, without the clutter."
-      subtitle="Log in to manage tasks, verify your token-backed session, and keep momentum from any device."
+      eyebrow="Secure Docking"
+      title="Dock into your private command orbit."
+      subtitle="Authenticate, verify your uplink, and re-enter a premium mission control surface built for focus."
     >
       <div className="auth-content">
-        <div>
-          <p className="section-label">Welcome back</p>
+        <div className="auth-header-block">
+          <p className="section-label">Return to orbit</p>
           <h2>Sign in to Momentum</h2>
           <p className="section-copy">
-            Use your registered email and password to reach the protected dashboard.
+            Use your registered credentials to reconnect with the protected command deck.
           </p>
+        </div>
+
+        <div className="auth-support-grid">
+          <article className="auth-support-card">
+            <strong>Protected route access</strong>
+            <p>Your session is verified before the dashboard opens.</p>
+          </article>
+          <article className="auth-support-card">
+            <strong>Clear recovery path</strong>
+            <p>Errors stay visible and the flow remains simple to follow.</p>
+          </article>
         </div>
 
         {locationState?.registered ? (
@@ -100,7 +111,7 @@ export default function Login() {
           </label>
 
           <button className="button button-primary" disabled={loading} type="submit">
-            {loading ? <Spinner label="Signing you in" /> : <span>Enter dashboard</span>}
+            {loading ? <Spinner label="Establishing uplink" /> : <span>Enter mission control</span>}
             {!loading ? <ArrowRight size={18} /> : null}
           </button>
         </form>
@@ -108,6 +119,8 @@ export default function Login() {
         <p className="auth-switch">
           New here? <Link to="/register">Create an account</Link>
         </p>
+
+        <p className="auth-footnote">Luxury visuals, unchanged authentication flow.</p>
       </div>
     </AuthShell>
   );

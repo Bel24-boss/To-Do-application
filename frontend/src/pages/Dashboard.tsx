@@ -1,16 +1,22 @@
 import { useDeferredValue, useEffect, useState } from 'react';
 import {
+  Activity,
+  ArrowUpRight,
   CheckCircle2,
   Circle,
+  Command,
   ListChecks,
   LogOut,
   Plus,
+  Rocket,
   Search,
+  Sparkles,
   ShieldCheck,
   Trash2,
 } from 'lucide-react';
 
 import api, { getApiErrorMessage } from '../api';
+import CosmicBackdrop from '../components/CosmicBackdrop';
 import Notice from '../components/Notice';
 import Spinner from '../components/Spinner';
 import type { Todo, TodoDraft, TodoFilter } from '../types';
@@ -20,6 +26,17 @@ const emptyDraft: TodoDraft = {
   title: '',
   description: '',
 };
+
+const taskTimestampFormatter = new Intl.DateTimeFormat(undefined, {
+  month: 'short',
+  day: 'numeric',
+  hour: 'numeric',
+  minute: '2-digit',
+});
+
+function formatTaskTimestamp(value: string) {
+  return taskTimestampFormatter.format(new Date(value));
+}
 
 export default function Dashboard() {
   const { user, logout } = useAuth();
@@ -138,11 +155,66 @@ export default function Dashboard() {
 
   return (
     <div className="app-shell">
+      <CosmicBackdrop variant="dashboard" />
       <div className="dashboard-layout">
+        <section className="panel command-hero">
+          <div className="command-hero-copy">
+            <p className="eyebrow">Orbital Command Center</p>
+            <h1>Momentum Mission Control</h1>
+            <p className="section-copy command-copy">
+              A luxury deep-space cockpit for organizing priorities, verifying secure sessions, and
+              tracking every task in motion.
+            </p>
+
+            <div className="command-chip-row">
+              <span className="signal-chip">
+                <ShieldCheck size={14} />
+                Auth shield online
+              </span>
+              <span className="signal-chip signal-chip-secondary">
+                <Rocket size={14} />
+                Task stream active
+              </span>
+            </div>
+
+            <div className="command-metrics">
+              <article className="command-stat">
+                <span className="command-stat-label">Total objectives</span>
+                <strong>{todos.length}</strong>
+                <p>Every secure task in your orbit.</p>
+              </article>
+              <article className="command-stat">
+                <span className="command-stat-label">Live progress</span>
+                <strong>{activeCount}</strong>
+                <p>Open items still moving through the system.</p>
+              </article>
+              <article className="command-stat">
+                <span className="command-stat-label">Mission complete</span>
+                <strong>{completedCount}</strong>
+                <p>Finished work captured without leaving the route.</p>
+              </article>
+            </div>
+          </div>
+
+          <div className="mission-radar">
+            <div className="mission-radar-core" />
+            <span className="mission-radar-ring mission-radar-ring-one" />
+            <span className="mission-radar-ring mission-radar-ring-two" />
+            <span className="mission-radar-ring mission-radar-ring-three" />
+            <span className="mission-radar-sweep" />
+            <span className="mission-radar-node mission-radar-node-a" />
+            <span className="mission-radar-node mission-radar-node-b" />
+            <span className="mission-radar-node mission-radar-node-c" />
+            <span className="mission-radar-caption mission-radar-caption-a">Secure lane</span>
+            <span className="mission-radar-caption mission-radar-caption-b">Task orbit</span>
+            <span className="mission-radar-caption mission-radar-caption-c">Session shield</span>
+          </div>
+        </section>
+
         <header className="topbar">
           <div>
             <p className="eyebrow">Protected Workspace</p>
-            <h1>Momentum Board</h1>
+            <h2 className="dashboard-title">Telemetry overview</h2>
           </div>
 
           <div className="topbar-actions">
@@ -161,23 +233,57 @@ export default function Dashboard() {
         <section className="dashboard-grid">
           <aside className="panel side-panel">
             <div>
-              <p className="section-label">System Status</p>
-              <h2>Everything you need is wired up.</h2>
+              <p className="section-label">Systems</p>
+              <h2>Elegant interface, original workflow.</h2>
               <p className="section-copy">
-                Registration, login, token verification, and protected API access all work together here.
+                The auth flow, token checks, protected calls, and task behavior remain exactly the same.
+                Only the presentation has been elevated into a premium satellite-style control room.
               </p>
+            </div>
+
+            <div className="system-pulse-grid">
+              <article className="pulse-chip">
+                <ShieldCheck size={18} />
+                <div>
+                  <strong>Protected API channel</strong>
+                  <p>Bearer headers stay attached to every secure request.</p>
+                </div>
+              </article>
+              <article className="pulse-chip">
+                <Sparkles size={18} />
+                <div>
+                  <strong>Readable by design</strong>
+                  <p>The UI stays cinematic without becoming difficult to use.</p>
+                </div>
+              </article>
+              <article className="pulse-chip">
+                <Command size={18} />
+                <div>
+                  <strong>Core behavior preserved</strong>
+                  <p>Register, login, logout, protected route, and CRUD remain unchanged.</p>
+                </div>
+              </article>
             </div>
 
             <div className="stat-grid">
               <article className="stat-card">
+                <span className="stat-icon">
+                  <Command size={16} />
+                </span>
                 <span>Total tasks</span>
                 <strong>{todos.length}</strong>
               </article>
               <article className="stat-card">
+                <span className="stat-icon">
+                  <Activity size={16} />
+                </span>
                 <span>In progress</span>
                 <strong>{activeCount}</strong>
               </article>
               <article className="stat-card">
+                <span className="stat-icon">
+                  <Sparkles size={16} />
+                </span>
                 <span>Completed</span>
                 <strong>{completedCount}</strong>
               </article>
@@ -185,8 +291,8 @@ export default function Dashboard() {
 
             <form className="composer" onSubmit={handleCreateTodo}>
               <div>
-                <p className="section-label">Create Task</p>
-                <h3>Add focused work</h3>
+                <p className="section-label">Launch Sequence</p>
+                <h3>Transmit a new objective</h3>
               </div>
 
               <label className="field">
@@ -232,8 +338,11 @@ export default function Dashboard() {
           <main className="panel board-panel">
             <div className="board-header">
               <div>
-                <p className="section-label">Task Board</p>
+                <p className="section-label">Task Constellation</p>
                 <h2>Protected route verified</h2>
+                <p className="board-subtitle">
+                  Search, filter, and manage your live objective stream with satellite-grade clarity.
+                </p>
               </div>
 
               <div className="board-controls">
@@ -268,6 +377,24 @@ export default function Dashboard() {
 
             {error ? <Notice tone="error">{error}</Notice> : null}
 
+            <div className="board-metrics">
+              <div className="board-metric-card">
+                <span className="board-metric-label">Visible in orbit</span>
+                <strong>{visibleTodos.length}</strong>
+              </div>
+              <div className="board-metric-card">
+                <span className="board-metric-label">Secure operator</span>
+                <p>{user?.email}</p>
+              </div>
+              <div className="board-metric-card board-metric-card-inline">
+                <ArrowUpRight size={18} />
+                <div>
+                  <span className="board-metric-label">Live filter</span>
+                  <p>{deferredQuery ? `Searching "${deferredQuery}"` : 'No search filter applied.'}</p>
+                </div>
+              </div>
+            </div>
+
             {loading ? (
               <div className="empty-state">
                 <Spinner label="Loading your protected task list" />
@@ -293,14 +420,26 @@ export default function Dashboard() {
 
                     <div className="todo-copy">
                       <div className="todo-title-row">
-                        <h3 className={todo.completed ? 'todo-title todo-title-complete' : 'todo-title'}>
-                          {todo.title}
-                        </h3>
-                        <span className={todo.completed ? 'status-tag status-done' : 'status-tag status-open'}>
-                          {todo.completed ? 'Done' : 'Open'}
-                        </span>
+                        <div className="todo-title-stack">
+                          <h3 className={todo.completed ? 'todo-title todo-title-complete' : 'todo-title'}>
+                            {todo.title}
+                          </h3>
+                          <div className="todo-meta">
+                            <span className={todo.completed ? 'status-tag status-done' : 'status-tag status-open'}>
+                              {todo.completed ? 'Done' : 'Open'}
+                            </span>
+                            <span className="todo-timestamp">Logged {formatTaskTimestamp(todo.created_at)}</span>
+                          </div>
+                        </div>
                       </div>
                       <p>{todo.description || 'No notes added for this task yet.'}</p>
+                      <div className="todo-card-footer">
+                        <span className="todo-footnote">
+                          {todo.completed
+                            ? 'Objective archived inside your protected orbit.'
+                            : 'Awaiting completion from mission control.'}
+                        </span>
+                      </div>
                     </div>
 
                     <button
